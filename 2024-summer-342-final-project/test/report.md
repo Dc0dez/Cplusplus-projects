@@ -1,0 +1,47 @@
+### Index With B-Tree
+
+#### How does B-Tree work? (focus on searching in an B-Tree)
+Searching within a B-Tree begins at the root node and compares the search key with the keys inside the current node. If the search key is found inside the node, the search ends. If the key is not located, the search proceeds to the next child node corresponding to the range of values the search key falls under. This process continues until the search either locates the search key or reaches a leaf node, confirming whether the key exists in the tree.
+
+#### How does B-Tree compare to a binary search tree?
+Binary search trees are useful for implementing maps and sets and quickly searching for entire data sets stored on the RAM.
+Binary search trees are sorted in inorder, preorder, and postorder traversal. These types of trees can become unbalanced depending on the order data is inserted because they are not always self-balanced, resulting in a worst case of O(n) when performing operations such as search, insert, and delete. Binary search trees begin at the root node and have a structure of one key per node. Each node in binary search tree has at most pointers to two child nodes.
+B-Trees, on the other hand, are used to search databases efficiently since they use indexing to quickly look up records stored on the disk. B-Trees are self-balancing tree data structures that are sorted in inorder traversal, resulting in a worst case of O(log n) when performing operations such as search, insert, and delete.
+B-Trees begin at the root node, which must have a minimum of 2 pointers to child nodes and at least 1 key. Each node in a B-Tree of degree ‘t’, except the root, can contain a minimum of ‘t-1’ keys and a maximum of ‘2t-1’ keys, stored in increasing order. Each node below the root also has associated pointers to a minimum of 't' child nodes and a maximum of ‘2t’ child nodes.
+Child nodes on the left will contain key values less than or equal to the leftmost key value in the parent node, child nodes in the middle will contain key values between the key values in the parent node, and child nodes on the right will contain key values larger than or equal to the rightmost key value in the parent node.
+
+#### Why could B-Tree be helpful for data indexing?
+B-Trees are helpful for data indexing because they efficiently manage disk I/O operations. Each node in a B-tree contains keys and pointers to data blocks, allowing data on the disk to be quickly accessed. Since B-Trees are self-balancing, they will remain shallow, even as they grow. Additionally, B-Trees incorporate multi-level indexing, where upper-level nodes point to lower-level index blocks, further reducing the number of blocks that must be accessed during a search. This structure makes B-Trees ideal for database indexing since they enable fast and efficient retrieval of records.
+
+#### What's the search complexity of B-Tree? And how does it affect search efficiency (time) comparing to hashtable?
+The search complexity of B-Trees is O(log n) in best and worst case scenarios. This is because B-Trees are designed to be self-balancing, ensuring that the tree remains balanced after every insertion and deletion, maintaining logarithmic search time. In contrast, hashtables have a search complexity of O(n) in worst case scenarios and O(1) in best case scenarios. To achieve the best case scenario for hashtables, the hash function must reliably distribute keys across the buckets. However, if hash collisions occur, the data structure performs poorly. Due to this risk, hashtables are not as reliable as B-Trees when it comes to searching databases with consistent high performance.
+
+#### Why does B-Tree provide advantage over hashtable for range query?
+B-Trees provide an advantage over hashtables for range queries because they maintain sorted data, allowing for efficient inorder traversal of elements. This makes it easy to retrieve records within a specific range by starting at the first elemenent of the range and traversing the tree until the last element of the range is located. Hashtables, on the other hand, do not have a mechanism to sort data. Keys distributed by a hash function across the buckets are stored unordered. This results in O(n) time complexity when performing range queries since each key in the hashtable must be checked individually.  
+
+
+### Performance Test
+
+#### Single Query
+After running the single range query test with a max table size of 30,000, I observed that as the values increased the search times remained relatively consistent for both B-tree and hashtable using index, while direct search gradually took longer. B-tree was consistently faster at completing the search, however, hashtable was still quick and only within <=5 microseconds slower on average. Both search algorithms took on average between 10 to 20 microseconds as the table grew. Direct search started at 83 microseconds for 1000 values, but by 20,000 values it started to take 1000+ microseconds to perform the search. The B-tree was the fastest because it is self-balanced and structured to perform indexed database range queries efficiently using inorder traversal. Given that hashtables do not have a mechanism to sort and easily traverse through data, the hashtable with index had to search the relevant buckets for the key within the single range query, resulting in more overhead and a slower time even with indexing. Direct search was the slowest because it had to perform a linear search through the entire database to locate the record.
+
+#### Range Query
+After running the range query test with a max table size of 40,000, I observed that as the values increased, the search times grew at a similar pace for B-Tree index, hashtable index, and direct search. B-Tree was faster at completing the search in most instances, however, hashtable managed to outperform it occasionally, likely due to caching effects. Each search algorithm took progressively longer to search as the table size increased.
+For instance, the search times for 1,000 values were ‘1000,40,42,47’, showing that all three algorithms handled the smallest dataset with similar efficiency. However, the difference in search algorithms became apparent as the test continued, especially towards the end ‘39000,1722,1631,2146’, showing B-Tree was still the fastest overall.
+The B-Tree was the fastest because it is self-balanced and structured to perform indexed database range queries efficiently using inorder traversal. However, it was much slower than searching in the single range query due to the additional overhead introduced from having to search for and return multiple records.
+Given that hashtables do not have a mechanism to sort and easily traverse through data, the hashtable index had to search the relevant buckets for the keys within the range query, and the additional overhead of having to search multiple records further decreased the speed of this algorithm.
+Direct search was the slowest because it had to perform a linear search through the entire database to locate the records. Overall, the difference in search times for these three algorithms was marginal for the range query test, but B-Tree was still the most efficient.
+
+
+### Extra Credit
+1. I learned that my success in life will depend on my ability to speak, write, and the quality of my ideas in this order. I learned there is a formula that determines the quality of my communication. The formula emphasizes how much knowledge I have and how much I practice with that knowledge, followed by my inherent talent which is not as important. I found out that when speaking to a group of people, starting off with a joke is a bad idea since it can fall flat, and instead it is better to start off with an empowerment promise. In addition, I found out about some helpful heuristics to keep in mind when speaking. These heuristics include repeatedly mentioning an idea, giving examples of other ideas that might be like mine but emphasizing the differences, and using verbal punctuation to help keep people engaged. I learned that when interviewing for a job, I should be able to convey my vision for solving a problem, the steps I would take to solve that problem, and the contributions I have made to solve that problem in a 5-minute timeframe. Lastly, I learned that ending with a joke or saluting the audience is better than saying thank you.
+
+2. I learned about three problems that interfere with listening. These three problems are pseudo listening (fake listening), selective listening (getting distracted by other sounds), and critical listening (being critical or criticizing the lecturer). I learned that there are six solutions to these problems. These solutions include being aware of the problem and stopping it if I catch myself doing it, being physically and mentally prepared to listen, setting a goal to listen 100% to the person speaking, sitting in the front, practicing listening, and pretending to be interested or fascinated. I learned that being physically prepared means that I am physically able to sit and listen (I am not hungry, I am well rested, etc.), and that being mentally prepared means that I am not letting any personal problems or things I am worried about distract me from listening.
+
+
+### References
+https://www.geeksforgeeks.org/introduction-of-b-tree-2/
+https://www.youtube.com/watch?v=aZjYr87r1b8
+https://www.youtube.com/watch?v=fAfuZiFDpRo
+https://www.geeksforgeeks.org/difference-between-binary-tree-and-b-tree/
+Chat GPT
